@@ -306,23 +306,35 @@ function modelrequest(model)
 end
 
 function Has_Body_Loaded(ped, type, hash_for_load, text)
-    Citizen.InvokeNative(0xD710A5007C2AC539, ped, type, 0)
-    Citizen.InvokeNative(0xD3A7B003ED343FD9, ped, hash_for_load, false, true, true)
-    Citizen.InvokeNative(0xCC8CA3E88256E58F, ped, 0, 1, 1, 1, false);
+    local readyLoad = false
+    local timeout = 0
+    while readyLoad == false do
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, ped, hash_for_load, false, true, true)
+        Wait(100)
+        Citizen.InvokeNative(0x704C908E9C405136, ped)
+        Citizen.InvokeNative(0xCC8CA3E88256E58F, ped, 0, 1, 1, 1, 0)
+        Wait(100)
+        readyLoad = Citizen.InvokeNative(0xA0BC8FAED8CFEB3C, ped)
+    end
     return true
 end
 
 function Has_Body_Loaded_Clothe(ped, type, hash_for_load, text)
+    local readyLoad = false
     local timeout = 0
-    Citizen.InvokeNative(0xD710A5007C2AC539, ped, type, 0)
-    -- Citizen.InvokeNative(0xD3A7B003ED343FD9, ped, hash_for_load, true, true, true)
-    Citizen.InvokeNative(0xD3A7B003ED343FD9, ped, hash_for_load, false, true, true)
-    Citizen.InvokeNative(0xCC8CA3E88256E58F, ped, 0, 1, 1, 1, false);
+    while readyLoad == false do
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, ped, hash_for_load, false, true, true)
+        Wait(100)
+        Citizen.InvokeNative(0x704C908E9C405136, ped)
+        Citizen.InvokeNative(0xCC8CA3E88256E58F, ped, 0, 1, 1, 1, 0)
+        Wait(100)
+        readyLoad = Citizen.InvokeNative(0xA0BC8FAED8CFEB3C, ped)
+    end
     return true
 end
 
 function Ped_Data_Load(ppid, Skin_Table, Clothe_Table, key)
-    SetModelPed(pped, Skin_Table["sex"])
+    SetModelPed(ppid, Skin_Table["sex"])
     Has_Body_Loaded(ppid, 0xB3966C9, Skin_Table["Body"], "Body")
     Has_Body_Loaded(ppid, 0x378AD10C, Skin_Table["HeadType"], "Head")
     Has_Body_Loaded(ppid, 0x823687F5, Skin_Table["LegsType"], "Legs")

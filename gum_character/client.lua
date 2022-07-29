@@ -1618,9 +1618,19 @@ function Mount_States()
 end
 
 function HasBodyComponentsLoaded(type, hash_for_load, text)
-    Citizen.InvokeNative(0xD710A5007C2AC539, PlayerPedId(), type, 0)
-    Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(), hash_for_load, false, true, true)
-    Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, false);
+    local readyLoad = false
+    while readyLoad == false do
+        Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(), hash_for_load, false, true, true)
+        Wait(100)
+        Citizen.InvokeNative(0x704C908E9C405136, PlayerPedId())
+        Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, 0)
+        Wait(100)
+        readyLoad = Citizen.InvokeNative(0xA0BC8FAED8CFEB3C, PlayerPedId())
+    end
+
+    -- Citizen.InvokeNative(0xD710A5007C2AC539, PlayerPedId(), type, 0)
+    -- Citizen.InvokeNative(0xD3A7B003ED343FD9, PlayerPedId(), hash_for_load, false, true, true)
+    -- Citizen.InvokeNative(0xCC8CA3E88256E58F, PlayerPedId(), 0, 1, 1, 1, false);
     return true
 end
 
@@ -2236,46 +2246,46 @@ function ReloadCloth()
 end
 
 function reload_scars()
-    if Skin_Table["scars_visibility"] ~= nil and Skin_Table["scars_visibility"] ~= 0 and Skin_Table["scars_tx_id"] ~= nil  and Skin_Table["scars_opacity"] ~= nil then
+    if Skin_Table["scars_tx_id"] ~= nil  and Skin_Table["scars_opacity"] ~= nil then
         TriggerEvent("gum_characters:colors", "scars", Skin_Table["scars_visibility"], Skin_Table["scars_tx_id"], 0, 0, 1, 1.0, 0, 1, 0,0,0,1,Skin_Table["scars_opacity"])
     end
-    if Skin_Table["spots_visibility"] ~= nil and Skin_Table["spots_visibility"] ~= 0 and Skin_Table["spots_tx_id"] ~= nil  and Skin_Table["spots_opacity"] ~= nil then
+    if Skin_Table["spots_tx_id"] ~= nil  and Skin_Table["spots_opacity"] ~= nil then
         TriggerEvent("gum_characters:colors", "spots", Skin_Table["spots_visibility"], Skin_Table["spots_tx_id"], 0, 0, 1, 1.0, 0, 1, 0,0,0,1,Skin_Table["spots_opacity"])
     end
-    if Skin_Table["disc_visibility"] ~= nil and Skin_Table["disc_visibility"] ~= 0 and Skin_Table["disc_tx_id"] ~= nil  and Skin_Table["disc_opacity"] ~= nil then
+    if Skin_Table["disc_tx_id"] ~= nil  and Skin_Table["disc_opacity"] ~= nil then
         TriggerEvent("gum_characters:colors", "disc", Skin_Table["disc_visibility"], Skin_Table["disc_tx_id"], 0, 0, 1, 1.0, 0, 1, 0,0,0,1,Skin_Table["disc_opacity"])
     end
-    if Skin_Table["complex_visibility"] ~= nil and Skin_Table["complex_visibility"] ~= 0 and Skin_Table["complex_tx_id"] ~= nil  and Skin_Table["complex_opacity"] ~= nil then
+    if Skin_Table["complex_tx_id"] ~= nil  and Skin_Table["complex_opacity"] ~= nil then
         TriggerEvent("gum_characters:colors", "complex", Skin_Table["complex_visibility"], Skin_Table["complex_tx_id"], 0, 0, 1, 1.0, 0, 1, 0,0,0,1,Skin_Table["complex_opacity"])
     end
-    if Skin_Table["acne_visibility"] ~= nil and Skin_Table["acne_visibility"] ~= 0 and Skin_Table["acne_tx_id"] ~= nil  and Skin_Table["acne_opacity"] ~= nil then
+    if Skin_Table["acne_tx_id"] ~= nil  and Skin_Table["acne_opacity"] ~= nil then
         TriggerEvent("gum_characters:colors", "acne", Skin_Table["acne_visibility"], Skin_Table["acne_tx_id"], 0, 0, 1, 1.0, 0, 1, 0,0,0,1,Skin_Table["acne_opacity"])
     end
-    if Skin_Table["ageing_visibility"] ~= nil and Skin_Table["ageing_visibility"] ~= 0 and Skin_Table["ageing_tx_id"] ~= nil  and Skin_Table["ageing_opacity"] ~= nil then
+    if Skin_Table["ageing_tx_id"] ~= nil  and Skin_Table["ageing_opacity"] ~= nil then
         TriggerEvent("gum_characters:colors", "ageing", Skin_Table["ageing_visibility"], Skin_Table["ageing_tx_id"], 0, 0, 1, 1.0, 0, 1, 0,0,0,1,Skin_Table["ageing_opacity"])
     end
-    if Skin_Table["freckles_visibility"] ~= nil and Skin_Table["freckles_visibility"] ~= 0 and Skin_Table["freckles_tx_id"] ~= nil  and Skin_Table["freckles_opacity"] ~= nil then
+    if Skin_Table["freckles_tx_id"] ~= nil  and Skin_Table["freckles_opacity"] ~= nil then
         TriggerEvent("gum_characters:colors", "freckles", Skin_Table["freckles_visibility"], Skin_Table["freckles_tx_id"], 0, 0, 1, 1.0, 0, 1, 0,0,0,1,Skin_Table["freckles_opacity"])
     end
-    if Skin_Table["moles_visibility"] ~= nil and Skin_Table["moles_visibility"] ~= 0 and Skin_Table["moles_tx_id"] ~= nil  and Skin_Table["moles_opacity"] ~= nil then
+    if Skin_Table["moles_tx_id"] ~= nil  and Skin_Table["moles_opacity"] ~= nil then
         TriggerEvent("gum_characters:colors", "moles", Skin_Table["moles_visibility"], Skin_Table["moles_tx_id"], 0, 0, 1, 1.0, 0, 1, 0,0,0,1,Skin_Table["moles_opacity"])
     end
-    if Skin_Table["eyebrows_visibility"] ~= nil and Skin_Table["eyebrows_visibility"] ~= 0  and Skin_Table["eyebrows_tx_id"] ~= nil  and Skin_Table["eyebrows_opacity"] ~= nil then
+    if Skin_Table["eyebrows_tx_id"] ~= nil  and Skin_Table["eyebrows_opacity"] ~= nil then
         TriggerEvent("gum_characters:colors", "eyebrows", Skin_Table["eyebrows_visibility"], Skin_Table["eyebrows_tx_id"], 1, 0, 0, 1.0, 0, 1, Skin_Table["eyebrows_color"],0,0,1,Skin_Table["eyebrows_opacity"])
     end
-    if Skin_Table["blush_visibility"] ~= nil and Skin_Table["blush_visibility"] ~= 0 and Skin_Table["blush_tx_id"] ~= nil  and Skin_Table["blush_opacity"] ~= nil then
+    if Skin_Table["blush_tx_id"] ~= nil  and Skin_Table["blush_opacity"] ~= nil then
         TriggerEvent("gum_characters:colors", "blush", Skin_Table["blush_visibility"], Skin_Table["blush_tx_id"], 1, 0, 0, 1.0, 0, 1, Skin_Table["blush_color_1"],0,0,1,Skin_Table["blush_opacity"])
     end
-    if Skin_Table["eyeliners_visibility"] ~= nil and Skin_Table["eyeliners_visibility"] ~= 0 and Skin_Table["eyeliners_tx_id"] ~= nil  and Skin_Table["eyeliners_opacity"] ~= nil then
+    if Skin_Table["eyeliners_tx_id"] ~= nil  and Skin_Table["eyeliners_opacity"] ~= nil then
         TriggerEvent("gum_characters:colors", "eyeliners", Skin_Table["eyeliners_visibility"], 1, 1, 0, 0, 1.0, 0, 1, Skin_Table["eyeliners_color_1"],0,0,Skin_Table["eyeliners_tx_id"],Skin_Table["eyeliners_opacity"])
     end
-    if Skin_Table["lipsticks_visibility"] ~= nil and Skin_Table["lipsticks_visibility"] ~= 0 and Skin_Table["lipsticks_tx_id"] ~= nil  and Skin_Table["lipsticks_opacity"] ~= nil then
+    if Skin_Table["lipsticks_tx_id"] ~= nil  and Skin_Table["lipsticks_opacity"] ~= nil then
         TriggerEvent("gum_characters:colors", "lipsticks", Skin_Table["lipsticks_visibility"], 1, 1, 0, 0, 1.0, 0, 1, Skin_Table["lipsticks_color_1"],Skin_Table["lipsticks_color_2"],Skin_Table["lipsticks_color_3"], Skin_Table["lipsticks_tx_id"], Skin_Table["lipsticks_opacity"])
     end
-    if Skin_Table["shadows_visibility"] ~= nil and Skin_Table["shadows_visibility"] ~= 0 and Skin_Table["shadows_tx_id"] ~= nil  and Skin_Table["shadows_opacity"] ~= nil then
+    if Skin_Table["shadows_tx_id"] ~= nil  and Skin_Table["shadows_opacity"] ~= nil then
         TriggerEvent("gum_characters:colors", "shadows", Skin_Table["shadows_visibility"], 1, 1, 0, 0, 1.0, 0, 1, Skin_Table["shadows_color_1"],Skin_Table["shadows_color_2"],Skin_Table["shadows_color_3"],Skin_Table["shadows_tx_id"],Skin_Table["shadows_opacity"])
     end
-    if Skin_Table["beardstabble_visibility"] ~= nil and Skin_Table["beardstabble_visibility"] ~= 0 and Skin_Table["beardstabble_tx_id"] ~= nil  and Skin_Table["beardstabble_opacity"] ~= nil then
+    if Skin_Table["beardstabble_tx_id"] ~= nil  and Skin_Table["beardstabble_opacity"] ~= nil then
         TriggerEvent("gum_characters:colors", "beardstabble", Skin_Table["beardstabble_visibility"], 1, 1, 0, 0, 1.0, 0, 1, Skin_Table["beardstabble_color_1"],Skin_Table["beardstabble_color_2"],Skin_Table["beardstabble_color_3"],Skin_Table["beardstabble_tx_id"],Skin_Table["beardstabble_opacity"])
     end
 end
