@@ -819,7 +819,7 @@ AddEventHandler('gumCore:subItem', function(source, name, count)
 	end
 	if inv_table[tonumber(_source)][counter] ~= nil or count ~= nil then
 		if inv_table[tonumber(_source)][counter].count-tonumber(count) == 0 then
-			table.remove(inv_table[tonumber(_source)], k)
+			table.remove(inv_table[tonumber(_source)], tonumber(counter))
 		else
 			inv_table[tonumber(_source)][counter].count = inv_table[tonumber(_source)][counter].count-tonumber(count)
 		end
@@ -883,33 +883,6 @@ AddEventHandler('gumCore:subItemByID', function(source, itemId, count)
 	end
 end)
 
-
-
--- RegisterCommand("testMeta", function(source, args)
--- 	-- print("----Edit exist meta data by ID ----")
--- 	-- local lastId = Inventory.getLastUsedItemID(source)
--- 	-- local getMetaValue = Inventory.getMetaTypeById(source, lastId, "durability")
--- 	-- Inventory.editMetaByID(source, lastId, "durability", getMetaValue-5)
-
--- 	-- print("----Edit exist meta data by item----")
--- 	-- Inventory.editMetaByName(source, "Saw", "durability", 5)
-
--- 	print("----Get Meta Data Value By Key----")
--- 	local lastId = Inventory.getLastUsedID(source)
--- 	local getMetaValue = Inventory.getMetaTypeById(source, lastId, "durability")
--- 	print(getMetaValue)
-
--- 	print("----Get Meta Data----")
--- 	local lastId = Inventory.getLastUsedID(source)
--- 	local getMeta = Inventory.getMetaById(source, lastId)
--- 	print(getMeta)
-
--- 	print("----DATA ITEMS----")
--- 	local itemDatas = Inventory.getItemsData(source, "Saw")
--- 	for a,b in pairs(itemDatas) do
--- 		print(b.id, b.metaData, b.item)
--- 	end
--- end)
 
 RegisterServerEvent('gumCore:editMetaDataByItemName')
 AddEventHandler('gumCore:editMetaDataByItemName', function(source, item, key, value, cb)
