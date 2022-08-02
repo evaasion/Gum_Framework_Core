@@ -125,7 +125,7 @@ AddEventHandler('gum_inventory:get_storage', function(storage, itm, wpn, id, siz
 		if v.name == nil then
 			for k2,v2 in pairs(itm) do
 				if v.item == v2.item then
-					table.insert(storage_table, {weapon=false, label=v2.label, item=v.item, count=v.count, limit=v2.limit})
+					table.insert(storage_table, {weapon=false, label=v2.label, item=v.item, count=v.count, limit=v2.limit, metaData=v.metaData, itemId=v.itemId})
 				end
 			end
 		else
@@ -152,7 +152,7 @@ AddEventHandler('gum_inventory:refresh_storage', function(storage, itm, wpn,id)
 		if v.name == nil then
 			for k2,v2 in pairs(itm) do
 				if v.item == v2.item then
-					table.insert(storage_table, {weapon=false, label=v2.label, item=v.item, count=v.count, limit=v2.limit})
+					table.insert(storage_table, {weapon=false, label=v2.label, item=v.item, count=v.count, limit=v2.limit, itemId=v.itemId, metaData=v.metaData})
 				end
 			end
 		else
@@ -211,23 +211,48 @@ RegisterNUICallback('transfer_to_storage', function(data, cb)
 	else
 		if data.size <= data.size+size then
 			if data.weapon == false then
-				TriggerEvent("guminputs:getInput", Config.Language[3].text, Config.Language[6].text, function(cb)
-					local count_item = tonumber(cb)
-					if count_item ~= nil then
-						if count_item ~= 'close' and count_item > 0 and data.count >= count_item then
-							if tonumber(size) >= tonumber(data.size)+tonumber(count_item*data.limit) then
-								TriggerServerEvent("gum_inventory:transfer_item_to_storage", data.item, count_item, data.container_id)
+				if tonumber(data.countInInventory) == 1 then
+					if tonumber(size) >= tonumber(data.size)+tonumber(1*data.limit) then
+						local emptyMetadata = false
+						for z,x in pairs(data.metaData) do
+							emptyMetadata = true
+						end
+						if emptyMetadata == true then
+							TriggerServerEvent("gum_inventory:transfer_item_to_storage", data.item, 1, data.container_id, data.itemId, data.metaData)
+						else
+							TriggerServerEvent("gum_inventory:transfer_item_to_storage", data.item, 1, data.container_id, data.itemId, nil)
+						end
+					else
+						Show_Other(true, data.container_id, storage_table, money_state, size)
+						exports['gum_notify']:DisplayLeftNotification(Config.Language[10].text, Config.Language[8].text, 'pistol', 2000)
+					end
+				else
+					TriggerEvent("guminputs:getInput", Config.Language[3].text, Config.Language[6].text, function(cb)
+						local count_item = tonumber(cb)
+						if count_item ~= nil then
+							if count_item ~= 'close' and count_item > 0 and data.count >= count_item then
+								if tonumber(size) >= tonumber(data.size)+tonumber(count_item*data.limit) then
+									local emptyMetadata = false
+									for z,x in pairs(data.metaData) do
+										emptyMetadata = true
+									end
+									if emptyMetadata == true then
+										TriggerServerEvent("gum_inventory:transfer_item_to_storage", data.item, count_item, data.container_id, data.itemId, data.metaData)
+									else
+										TriggerServerEvent("gum_inventory:transfer_item_to_storage", data.item, count_item, data.container_id, data.itemId, nil)
+									end
+								else
+									Show_Other(true, data.container_id, storage_table, money_state, size)
+									exports['gum_notify']:DisplayLeftNotification(Config.Language[10].text, Config.Language[8].text, 'pistol', 2000)
+								end
 							else
 								Show_Other(true, data.container_id, storage_table, money_state, size)
-								exports['gum_notify']:DisplayLeftNotification(Config.Language[10].text, Config.Language[8].text, 'pistol', 2000)
 							end
 						else
 							Show_Other(true, data.container_id, storage_table, money_state, size)
 						end
-					else
-						Show_Other(true, data.container_id, storage_table, money_state, size)
-					end
-				end)
+					end)
+				end
 			else
 				if data.used == 1 then
 					Show_Other(true, data.container_id, storage_table, money_state, size)
@@ -273,18 +298,42 @@ RegisterNUICallback('transfer_from_storage', function(data, cb)
 		end)
 	else
 		if data.weapon == false then
-			TriggerEvent("guminputs:getInput", Config.Language[3].text, Config.Language[6].text, function(cb)
-				local count_item = tonumber(cb)
-				if count_item ~= nil then
-					if count_item ~= 'close' and tonumber(count_item) > 0 and tonumber(data.count) >= tonumber(count_item) and Config.Max_Items >= tonumber(count_in_inventory+count_item*data.limit) then
-						TriggerServerEvent("gum_inventory:transfer_item_from_storage", data.item, count_item, data.container_id)
+			if tonumber(data.countInInventory) == 1 then
+				if tonumber(data.count) >= tonumber(1) and Config.Max_Items >= tonumber(count_in_inventory+1*data.limit) then
+					local emptyMetadata = false
+					for z,x in pairs(data.metaData) do
+						emptyMetadata = true
+					end
+					if emptyMetadata == true then
+						TriggerServerEvent("gum_inventory:transfer_item_from_storage", data.item, 1, data.container_id, data.itemId, data.metaData)
 					else
-						Show_Other(true, data.container_id, storage_table, money_state, size)
+						TriggerServerEvent("gum_inventory:transfer_item_from_storage", data.item, 1, data.container_id, data.itemId, nil)
 					end
 				else
 					Show_Other(true, data.container_id, storage_table, money_state, size)
 				end
-			end)
+			else
+				TriggerEvent("guminputs:getInput", Config.Language[3].text, Config.Language[6].text, function(cb)
+					local count_item = tonumber(cb)
+					if count_item ~= nil then
+						if count_item ~= 'close' and tonumber(count_item) > 0 and tonumber(data.count) >= tonumber(count_item) and Config.Max_Items >= tonumber(count_in_inventory+count_item*data.limit) then
+							local emptyMetadata = false
+							for z,x in pairs(data.metaData) do
+								emptyMetadata = true
+							end
+							if emptyMetadata == true then
+								TriggerServerEvent("gum_inventory:transfer_item_from_storage", data.item, count_item, data.container_id, data.itemId, data.metaData)
+							else
+								TriggerServerEvent("gum_inventory:transfer_item_from_storage", data.item, count_item, data.container_id, data.itemId, nil)
+							end
+						else
+							Show_Other(true, data.container_id, storage_table, money_state, size)
+						end
+					else
+						Show_Other(true, data.container_id, storage_table, money_state, size)
+					end
+				end)
+			end
 		else
 			if data.used == 1 then
 				Show_Other(true, data.container_id, storage_table, money_state, size)
@@ -1417,19 +1466,24 @@ AddEventHandler('gum_inventory:send_list_inventory', function(table, wtable, tta
 	else
 		speed = 0.0
 	end
-
+	if weapon_table == nil then
+		weapon_table = {}
+	end
 	inventory_table = table
 	weapon_table = wtable
 	itm_table = ttable
-
 	wp_table = wptable
-	for k,v in pairs(weapon_table) do
-		if v.used == 1 then
-			for k2,v2 in pairs(json.decode(v.ammo)) do
-				SetPedAmmoByType(PlayerPedId(), GetHashKey(k2), v2);
+
+	if (weapon_table ~= nil) then
+		for k,v in pairs(weapon_table) do
+			if v.used == 1 then
+				for k2,v2 in pairs(json.decode(v.ammo)) do
+					SetPedAmmoByType(PlayerPedId(), GetHashKey(k2), v2);
+				end
 			end
 		end
 	end
+	SendNUIMessage({type = "updateInventory", table_for_json = inventory_table,wtable_for_json = weapon_table,money = money_state,gold = gold_state,})
 end)
 
 AddEventHandler('onResourceStop', function(resourceName)
@@ -1538,7 +1592,15 @@ Citizen.CreateThread(function()
 										Citizen.Wait(500)
 										DeleteEntity(v.entity)
 										table.remove(dropped_items_entity, k)
-										TriggerServerEvent("gumCore:addItem", GetPlayerServerId(PlayerId()), v.item, v.count)
+										local emptyMetadata = false
+										for z,x in pairs(v.metaData) do
+											emptyMetadata = true
+										end
+										if emptyMetadata == true then
+											TriggerServerEvent("gumCore:addItem", GetPlayerServerId(PlayerId()), v.item, v.count, v.metaData)
+										else
+											TriggerServerEvent("gumCore:addItem", GetPlayerServerId(PlayerId()), v.item, v.count)
+										end
 										Citizen.Wait(1000)
 									end
 								else
@@ -1862,7 +1924,7 @@ end)
 
 RegisterNUICallback('use_item', function(data, cb)
 	if id_container == 0 then
-		TriggerServerEvent("gum:use", data.item)
+		TriggerServerEvent("gum:use", data.item, data.id)
 	end
 end)
 
@@ -1871,14 +1933,22 @@ RegisterNUICallback('give_checked_item', function(data, cb)
 		if data.item ~= "money" and data.item ~= "gold" then
 			if tonumber(data.count) >= 1 then
 				for k,v in pairs(inventory_table) do
-					if v.item == data.item then 
+					if tonumber(v.itemId) == tonumber(data.item) then 
 						if v.count >= tonumber(data.count) then
 							Show_Items(false, false)
 							SetNuiFocus(false, false)
 							guiEnabled = false
 							TriggerServerEvent("gum_inventory:turn_ped", data.id)
-							TriggerServerEvent("gumCore:subItem", GetPlayerServerId(PlayerId()), data.item, data.count)
-							TriggerServerEvent("gumCore:addItem", tonumber(data.id), data.item, data.count, GetPlayerServerId(PlayerId()))
+							TriggerServerEvent("gumCore:subItemByID", GetPlayerServerId(PlayerId()), data.item, data.count)
+							local emptyMetadata = false
+							for z,x in pairs(data.metaData) do
+								emptyMetadata = true
+							end
+							if emptyMetadata == true then
+								TriggerServerEvent("gumCore:addItem", tonumber(data.id), data.itemName, data.count, data.metaData, GetPlayerServerId(PlayerId()))
+							else
+								TriggerServerEvent("gumCore:addItem", tonumber(data.id), data.itemName, data.count, nil, GetPlayerServerId(PlayerId()))
+							end
 							-- Citizen.Wait(1000)
 							-- TriggerServerEvent("gumCore:giveItem", data.id, data.item, data.count, GetPlayerServerId(PlayerId()))
 						else
@@ -1962,7 +2032,7 @@ RegisterNUICallback('give_item', function(data, cb)
 		end
 	end
 	Citizen.Wait(0)
-	SendNUIMessage({type = "playertable", table_p_for_json = player_table, item = data.item, count = data.count})
+	SendNUIMessage({type = "playertable", table_p_for_json = player_table, item = data.item, count = data.count, itemName=data.itemName})
 end)
 
 
@@ -2005,7 +2075,7 @@ AddEventHandler('gum_inventory:drop_list', function(drop_list)
 						PlaceObjectOnGroundProperly(dropped_item)
 						FreezeEntityPosition(dropped_item, true)
 						Citizen.InvokeNative(0x7DFB49BCDB73089A, dropped_item, true)
-						table.insert(dropped_items_entity, {id=v.id, entity=dropped_item, x=v.x ,y=v.y, z=v.z, item=v.item, count=v.count, weapon=v.weapon, weapon_model=v.weapon_model})
+						table.insert(dropped_items_entity, {id=v.id, metaData=v.metaData, itemId=v.itemid, entity=dropped_item, x=v.x ,y=v.y, z=v.z, item=v.item, count=v.count, weapon=v.weapon, weapon_model=v.weapon_model})
 						SetEntityCollision(dropped_item, false, false)
 					end
 				end
@@ -2031,11 +2101,11 @@ RegisterNUICallback('drop_item', function(data, cb)
 			if tonumber(data.count) >= 1 then
 				if data.item ~= "money" and data.item ~= "gold" then
 					for k,v in pairs(inventory_table) do
-						if v.item == data.item then 
+						if tonumber(v.itemId) == tonumber(data.item) then 
 							if v.count >= tonumber(data.count) then
-								TriggerServerEvent("gumCore:subItem", GetPlayerServerId(PlayerId()), data.item, data.count)
+								TriggerServerEvent("gumCore:subItemByID", GetPlayerServerId(PlayerId()), data.item, data.count)
 								local coords = GetEntityCoords(PlayerPedId(), true)
-								table.insert(dropped_items, {x=coords.x ,y=coords.y, z=coords.z, item=data.item, count=data.count, weapon=false})
+								table.insert(dropped_items, {x=coords.x ,y=coords.y, z=coords.z, itemid=v.itemId, item=v.item, count=data.count, metaData=data.metaData, weapon=false})
 								playAnim("mech_pickup@firewood", "putdown", 3000, 1)
 								Citizen.Wait(0)
 								TriggerServerEvent("gum_inventory:upload_drops", dropped_items)
@@ -2105,7 +2175,7 @@ RegisterNUICallback('drop_item', function(data, cb)
 					end
 				end
 			else
-				exports['gum_notify']:DisplayLeftNotification(Config.Language[10].text, ""..Config.Language[310].text.."", 'bag', 2000)
+				exports['gum_notify']:DisplayLeftNotification(Config.Language[10].text, ""..Config.Language[37].text.."", 'bag', 2000)
 			end
 		end
 	else

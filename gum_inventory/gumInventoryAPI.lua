@@ -63,11 +63,36 @@ exports('gum_inventoryApi',function()
         TriggerEvent("gumCore:subItem",source,tostring(itemName),tonumber(count))
     end
 
-    self.destroyItem = function(source,itemId,count)
-        TriggerEvent("gumCore:subItem",source,tostring(itemId))
+    self.subItemByID = function(source,itemId,count)
+        TriggerEvent("gumCore:subItemByID",source,tostring(itemId),count)
     end
-    self.getItemMeta = function(source,itemId)
-        TriggerEvent("gumCore:getItemMeta",source,tostring(itemId))
+
+    self.getLastUsedID = function(source)
+        TriggerEvent("gumCore:getLastUsedId", source, function(data)
+            id = data
+        end)
+        return id
+    end
+
+    self.getMetaById = function(source, id)
+        TriggerEvent("gumCore:getMetadata", source, id, function(data)
+            id = data
+        end)
+        return id
+    end
+
+    self.getMetaTypeById = function(source, id, value)
+        TriggerEvent("gumCore:getMetadataValue", source, id, value, function(data)
+            id = data
+        end)
+        return id
+    end
+
+    self.getItemsData = function(source,itemName)
+        TriggerEvent("gumCore:getItemsIdData", source, itemName, function(data)
+            can = data
+        end)
+        return can
     end
 
     self.getItemCount = function(source,item)
@@ -77,21 +102,25 @@ exports('gum_inventoryApi',function()
         end, tostring(item))
         return count
     end
+    
+    self.canCarryItem = function(source, name, amount)
+        local can
+        TriggerEvent("gumCore:canCarryItem",source, name, amount, function(data)
+            can = data
+        end)
+        return can
+    end
+    
+    self.editMetaByID = function(source,itemId,metaDataName,value)
+        TriggerEvent("gumCore:editMetaDataByID",source,itemId,metaDataName,value)
+    end
+
+    self.editMetaByName = function(source,itemName,metaDataName,value)
+        TriggerEvent("gumCore:editMetaDataByItemName",source,itemName,metaDataName,value)
+    end
 
     self.addBullets = function(source,weaponId,type,cuantity)
         TriggerEvent("gumCoreClient:addBullets",source,weaponId,type,cuantity)
-    end
-
-    self.addMetadata = function(source,itemId,metaDataName,value,visibility)
-        TriggerEvent("gumCoreClient:addMeta",source,itemId,metaDataName,value,visibility)
-    end
-
-    self.removeMetadata = function(source,itemId,metaDataName,value,visibility)
-        TriggerEvent("gumCoreClient:removeMeta",source,itemId,metaDataName,value,visibility)
-    end
-
-    self.editMetadata = function(source,itemId,metaDataName,value,visibility)
-        TriggerEvent("gumCoreClient:editMeta",source,itemId,metaDataName,value,visibility)
     end
 
     self.getWeaponBullets = function(source,weaponId)
@@ -101,15 +130,7 @@ exports('gum_inventoryApi',function()
         end,weaponId)
         return bull
     end
-    
-    self.canCarryItems = function(source, amount)
-        local can
-        TriggerEvent("gumCore:canCarryItems",source, amount,function(data)
-            can = data
-        end)
-        return can
-    end
-    
+
     self.RegisterUsableItem = function(itemName,cb)
         TriggerEvent("gumCore:registerUsableItem",itemName,cb)
     end

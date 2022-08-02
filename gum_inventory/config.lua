@@ -45,7 +45,7 @@ Config.Language = {
     [39] = {text = "This inventory is opened from other.",},
     [40] = {text = "You dont have this count money.",},
     [41] = {text = "You dont have slots in inventory.",},
-    [42] = {text = "You cant hold much items",},
+    [42] = {text = "He cant hold much items",},
     [43] = {text = "He cant hold more weapons.",},
     [44] = {text = "You cant hold more weapons.",},
     [45] = {text = "You must unequip first second weapon.",},
