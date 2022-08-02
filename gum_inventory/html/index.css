@@ -61,7 +61,7 @@
     color: rgb(255, 255, 255);
     position: absolute;
     top: 50%;
-    left: 12%;
+    left: 16%;
     transform: translate(-50%, -50%);
     width: 400px;
     max-height: 401px;
@@ -104,6 +104,22 @@
     background-size: 100% 100%;
 }
 
+#progress {
+    background-color: rgb(83, 83, 83);
+    background: rgb(158, 1, 1);
+    position: absolute;
+    top: 5px;
+    left:5px;
+    width: 50px;
+    height: 5px;  
+    -webkit-transform:rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+ }
 #slot3 {
     padding: 25px;
     color: rgb(255, 255, 255);
@@ -629,7 +645,7 @@
     overflow-y: scroll;
     overflow-x: hidden;
     position: relative;
-	max-width: 380px;
+	max-width: 680px;
 	max-height: 420px;
 	top: 20%;
 	left: 5%;
@@ -645,10 +661,10 @@
      color: rgb(255, 255, 255);
      position: absolute;
      top: 50%;
-     left: 38%;
+     left: 60%;
      transform: translate(-50%, -50%);
-     width: 400px;
-     max-height: 401px;
+     width: 700px;
+     max-height: 701px;
      height: 550px;
      max-height: 581px;
      background-image: url('images/background.png');
@@ -778,7 +794,16 @@ h2 {
     background-image: url('images/button2.png');
     transition-duration: 0.4s;
 }
-
+#myInput {
+    color: rgb(223, 221, 221);
+    background: #4d4d4d;
+    width: 10h0px;
+    overflow: hidden;
+    outline: none;
+    position:absolute;
+    right:20px;
+    bottom:15px;
+}
 #input_size1 {
     color: rgb(223, 221, 221);
     background: #4d4d4d;

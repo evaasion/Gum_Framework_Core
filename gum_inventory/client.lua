@@ -143,16 +143,24 @@ RegisterNetEvent('gum_inventory:refresh_storage')
 AddEventHandler('gum_inventory:refresh_storage', function(storage, itm, wpn,id)
 	storage_table = {}
 	for k,v in pairs(storage) do
-		if v.item == 'money' then
-			table.insert(storage_table, {weapon=false, label=Config.Language[2].text, item="money", count=v.count, limit=0})
-		end
 		if v.item == 'gold' then
-			table.insert(storage_table, {weapon=false, label=Config.Language[1].text, item="gold", count=v.count, limit=0})
+			if v.count == nil then
+				table.insert(storage_table, {weapon=false, label=Config.Language[1].text, item="gold", count=0, limit=0})
+			else
+				table.insert(storage_table, {weapon=false, label=Config.Language[1].text, item="gold", count=(math.floor(v.count*10)/10), limit=0})
+			end
+		end
+		if v.item == 'money' then
+			if v.count == nil then
+				table.insert(storage_table, {weapon=false, label=Config.Language[2].text, item="money", count=0, limit=0})
+			else
+				table.insert(storage_table, {weapon=false, label=Config.Language[2].text, item="money", count=(math.floor(v.count*10)/10), limit=0})
+			end
 		end
 		if v.name == nil then
 			for k2,v2 in pairs(itm) do
 				if v.item == v2.item then
-					table.insert(storage_table, {weapon=false, label=v2.label, item=v.item, count=v.count, limit=v2.limit, itemId=v.itemId, metaData=v.metaData})
+					table.insert(storage_table, {weapon=false, label=v2.label, item=v.item, count=v.count, limit=v2.limit, metaData=v.metaData, itemId=v.itemId})
 				end
 			end
 		else

@@ -1,8 +1,8 @@
 const contextMenu = document.getElementById("context-menu");
+const table_for_delete = document.querySelector('#playerData');
 const cnt1 = document.getElementById("cnt1");
 const cnt2 = document.getElementById("cnt2");
 const scope = document.querySelector("body");
-const table_for_delete = document.querySelector('#playerData');
 var count_inventory = 0;
 var count_winventory = 0;
 var count_sinventory = 0;
@@ -11,6 +11,7 @@ var max_count_winventory = 0;
 var displayed = false;
 var changed = false;
 var clicked_id = "";
+var clicked_meta = {};
 var clicked_type = "";
 var visible = false;
 var drag_to_normal = false
@@ -30,6 +31,8 @@ var slot2 = ""
 var slot3 = ""
 var slot4 = ""
 var slot5 = ""
+var clicked_name = ""
+var table_inv = {}
 $(document).keydown(function(e) {
     var close = 27, presse=69;
     switch (e.keyCode) {
@@ -44,7 +47,7 @@ $(document).keydown(function(e) {
             if (Number(id_for_use_item) !== -1) {
                 if (table_inv[id_for_use_item].usable !== undefined){
                     if (table_inv[id_for_use_item].usable == 1) {
-                        $.post('http://gum_inventory/use_item', JSON.stringify({ item: table_inv[id_for_use_item].item }));
+                        $.post('http://gum_inventory/use_item', JSON.stringify({ item: table_inv[id_for_use_item].item, id:table_inv[id_for_use_item].itemId }));
                     }
                 }
             }
@@ -123,6 +126,7 @@ $(function() {
                 size = item.size
                 id_container = item.id_con
                 storage_inv = item.strg_tbl
+                storage_inv.sort(function(a, b){if (a.item > b.item) {return -1;}return 0;})
                 loadTableData(table_inv, Math.round(item.money * 100)/100, wtable_inv, item.gold)
                 loadstoragedata(storage_inv)
                 display2(true)
@@ -132,9 +136,16 @@ $(function() {
                 document.getElementById("id03").innerHTML = ""+config.language[0].text+" : "+Math.round(count_inventory * 100) / 100+" kg / "+max_count_inventory+" kg";
                 document.getElementById("id07").innerHTML = ""+config.language[1].text+" : "+count_winventory+" / "+max_count_winventory;
                 document.getElementById("id08").innerHTML = ""+config.language[3].text+" : "+Math.round(count_sinventory * 100) / 100+" kg / "+size+" kg";
-
                 $("#container_other").show();
             }
+        }
+
+        if (item.type === "updateInventory") {
+            table_inv = {}
+            table_inv = item.table_for_json
+            wtable_inv = {}
+            wtable_inv = item.wtable_for_json
+            loadTableData(table_inv, Math.round(item.money * 100)/100, wtable_inv, item.gold)
         }
         if (item.type === "inventory_update") {
             if (item.update == true) {
@@ -151,7 +162,7 @@ $(function() {
         }
         if (item.type === "playertable") {
             table_play = item.table_p_for_json
-            loadPlayerData(table_play, item.item, item.count)
+            loadPlayerData(table_play, item.item, item.count, item.itemName)
         }
         if (item.type === "weapon_desc_update") {
             change_active_weapon(item.data_info)
@@ -181,7 +192,18 @@ function loadTableData(table_inv, money, wtable_inv, gold) {
     for (var i in table_inv) {
         count_inventory = table_inv[i].count*table_inv[i].limit+count_inventory
         weight_item = table_inv[i].count*table_inv[i].limit
-        dataHtml += '<div class="item"><div id="'+ i +'" class="item-content" onMouseOver="change_name('+ i +')" ondblclick="UseItem('+i+')"><img src="images/items/' + table_inv[i].item + '.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_'+i+'">' + table_inv[i].count + '/'+Math.round(weight_item*100)/100+'kg</div></div></div>'
+        var durabilityValue = 0
+        var metadataTable = table_inv[i].metaData
+        for (var a in metadataTable) {
+            if (a === "durability") {
+                durabilityValue = table_inv[i].metaData[a]
+            }
+        }
+        if (durabilityValue !== 0) {
+            dataHtml += '<div class="item"><progress id="progress" max="100" value="'+durabilityValue+'"></progress><div id="'+ i +'" class="item-content" onMouseOver="change_name('+ i +')" ondblclick="UseItem('+i+')"><img src="images/items/' + table_inv[i].item + '.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_'+i+'">' + table_inv[i].count + '/'+Math.round(weight_item*100)/100+'kg</div></div></div>'
+        } else {
+            dataHtml += '<div class="item"><div id="'+ i +'" class="item-content" onMouseOver="change_name('+ i +')" ondblclick="UseItem('+i+')"><img src="images/items/' + table_inv[i].item + '.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_'+i+'">' + table_inv[i].count + '/'+Math.round(weight_item*100)/100+'kg</div></div></div>'
+        }
     }
     for (var i in wtable_inv) {
         count_winventory = count_winventory+1
@@ -266,6 +288,7 @@ function clear_hotbar(id){
         document.getElementById("slot5").style.backgroundImage = "";
     }
 }
+
 function transfer_to_storage() {
     if (dragged_item_inv === 'money') {
         $.post('http://gum_inventory/transfer_to_storage', JSON.stringify({weapon:false, item: "money", count: moneysd, container_id:id_container, size:count_sinventory}));
@@ -275,18 +298,19 @@ function transfer_to_storage() {
         if (dragged_item_inv === undefined) {
             $.post('http://gum_inventory/transfer_to_storage', JSON.stringify({weapon:true, id: wtable_inv[dragged_witem_inv].id, item: wtable_inv[dragged_witem_inv].name, container_id:id_container, used:wtable_inv[dragged_witem_inv].used, size:count_sinventory}));
         } else {
-            $.post('http://gum_inventory/transfer_to_storage', JSON.stringify({weapon:false, item: table_inv[dragged_item_inv].item, count: table_inv[dragged_item_inv].count, container_id:id_container, size:count_sinventory, limit:table_inv[dragged_item_inv].limit}));
+            $.post('http://gum_inventory/transfer_to_storage', JSON.stringify({weapon:false, itemId: table_inv[dragged_item_inv].itemId, item: table_inv[dragged_item_inv].item, count: table_inv[dragged_item_inv].count, container_id:id_container, size:count_sinventory, limit:table_inv[dragged_item_inv].limit, metaData:table_inv[dragged_item_inv].metaData, countInInventory:table_inv[dragged_item_inv].count}));
         }
     }
     drag_to_other = false
 }
+
 function transfer_from_storage() {
     if (dragged_stor_inv == "money") {
         $.post('http://gum_inventory/transfer_from_storage', JSON.stringify({ item: storage_inv[dragged_stor_inv].item, weapon: storage_inv[dragged_stor_inv].weapon, count: storage_inv[dragged_stor_inv].count, container_id:id_container }));
     } else if (dragged_stor_inv == "gold") {
             $.post('http://gum_inventory/transfer_from_storage', JSON.stringify({ item: storage_inv[dragged_stor_inv].item, weapon: storage_inv[dragged_stor_inv].weapon, count: storage_inv[dragged_stor_inv].count, container_id:id_container }));
     } else {
-        $.post('http://gum_inventory/transfer_from_storage', JSON.stringify({ item: storage_inv[dragged_stor_inv].item, weapon: storage_inv[dragged_stor_inv].weapon, count: storage_inv[dragged_stor_inv].count, container_id:id_container, limit:storage_inv[dragged_stor_inv].limit }));
+        $.post('http://gum_inventory/transfer_from_storage', JSON.stringify({ item: storage_inv[dragged_stor_inv].item, itemId: storage_inv[dragged_stor_inv].itemId, metaData: storage_inv[dragged_stor_inv].metaData, weapon: storage_inv[dragged_stor_inv].weapon, count: storage_inv[dragged_stor_inv].count, container_id:id_container, limit:storage_inv[dragged_stor_inv].limit, countInInventory:storage_inv[dragged_stor_inv].count }));
     }
     drag_to_normal = false
 }
@@ -299,13 +323,13 @@ function loadstoragedata(strg_dt) {
 
     for (var i in strg_dt) {
         if (strg_dt[i].weapon == false & strg_dt[i].item === 'money' & strg_dt[i].item !== 'gold') {
-            data_storage_Html += '<div class="item"><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].item + '.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_'+i+'">' + strg_dt[i].count + '</div></div></div>'
+            data_storage_Html += '<div class="item" data-content="'+strg_dt[i].label+'"><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].item + '.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_'+i+'">' + strg_dt[i].count + '</div></div></div>'
         }
     }
 
     for (var i in strg_dt) {
         if (strg_dt[i].weapon == false & strg_dt[i].item === 'gold' & strg_dt[i].item !== 'money') {
-            data_storage_Html += '<div class="item"><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].item + '.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_'+i+'">' + strg_dt[i].count + '</div></div></div>'
+            data_storage_Html += '<div class="item" data-content="'+strg_dt[i].label+'"><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].item + '.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_'+i+'">' + strg_dt[i].count + '</div></div></div>'
         }
     }
 
@@ -313,17 +337,28 @@ function loadstoragedata(strg_dt) {
         if (strg_dt[i].weapon == false & strg_dt[i].item !== 'money' & strg_dt[i].item !== 'gold') {
             count_sinventory = strg_dt[i].count*strg_dt[i].limit+count_sinventory
             weight_item = strg_dt[i].count*strg_dt[i].limit
-
-            data_storage_Html += '<div class="item"><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].item + '.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_'+i+'">'+ strg_dt[i].count +'/'+ Math.round(weight_item * 100) / 100 + ' kg</div></div></div>'
+            var durabilityValue = 0
+            var metadataTable = strg_dt[i].metaData
+            for (var a in metadataTable) {
+                if (a === "durability") {
+                    durabilityValue = strg_dt[i].metaData[a]
+                }
+            }
+            if (durabilityValue !== 0) {
+                data_storage_Html += '<div class="item" data-content="'+strg_dt[i].label+'"><progress id="progress" max="100" value="'+durabilityValue+'"></progress><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].item + '.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_'+i+'">'+ strg_dt[i].count +'/'+ Math.round(weight_item * 100) / 100 + ' kg</div></div></div>'
+            } else {
+                data_storage_Html += '<div class="item" data-content="'+strg_dt[i].label+'"><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].item + '.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_'+i+'">'+ strg_dt[i].count +'/'+ Math.round(weight_item * 100) / 100 + ' kg</div></div></div>'
+            }
         } 
     }
 
     for (var i in strg_dt) {
         if (strg_dt[i].weapon == true & strg_dt[i].item !== 'money' & strg_dt[i].item !== 'gold'){
             count_sinventory = count_sinventory+1
-            data_storage_Html += '<div class="item"><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].count + '.png" width="50" height="50"  id="item"></div></div>'
+            data_storage_Html += '<div class="item" data-content="'+strg_dt[i].label+'"><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].count + '.png" width="50" height="50"  id="item"></div></div>'
         }
     }
+
     tableBodyStorage.innerHTML = data_storage_Html
     setTimeout(() => {  
         const grid_other = new Muuri('.grid_other', {
@@ -341,7 +376,9 @@ function loadstoragedata(strg_dt) {
                 if (drag_to_normal == true) {
                     transfer_from_storage()
                 }
-    }); }, 5);
+     });
+     filterTextInput()
+    }, 5);
 }
 
 var frs1 = document.getElementById('grid0');
@@ -453,12 +490,12 @@ function reset_button(){
     document.getElementById("id01").innerHTML = '';
     document.getElementById("id02").innerHTML = '';
 }
-function loadPlayerData(table_play, id_item, count) {
+function loadPlayerData(table_play, id_item, count, itemName) {
     const tablePlayer = document.getElementById('playerData');
     let dataHHtml = '<div id="itemek" class="item2" onclick=CloseList()>'+config.language[28].text+'</div>';
     if (count > 0 ){
         for (var i in table_play) {
-            dataHHtml += '<div id="itemek" class="item2" onclick=GiveItemNow(\''+table_play[i].id+'\',\''+id_item+'\',\''+count+'\')>['+table_play[i].id+'] '+table_play[i].name+'</div>'
+            dataHHtml += '<div id="itemek" class="item2" onclick=GiveItemNow(\''+table_play[i].id+'\',\''+id_item+'\',\''+count+'\',\''+itemName+'\')>['+table_play[i].id+'] '+table_play[i].name+'</div>'
         }
         tablePlayer.innerHTML = dataHHtml
     }
@@ -467,14 +504,14 @@ function CloseList() {
     removeAllChildNodes(table_for_delete);
 }
 
-function GiveItemNow(id_player, item, count){
+function GiveItemNow(id_player, item, count,itemName){
     removeAllChildNodes(table_for_delete);
     if (item == "money") {
         $.post('http://gum_inventory/give_checked_item', JSON.stringify({ id: id_player, item: item, count: count, is:clicked_type }));
     } else if (item == "gold") {
             $.post('http://gum_inventory/give_checked_item', JSON.stringify({ id: id_player, item: item, count: count, is:clicked_type }));
     } else {
-        $.post('http://gum_inventory/give_checked_item', JSON.stringify({ id: id_player, item: item, count: Math.floor(count), is:clicked_type }));
+        $.post('http://gum_inventory/give_checked_item', JSON.stringify({ id: id_player, item: item, count: Math.floor(count), is:clicked_type, metaData:clicked_meta, itemName:itemName }));
     }
 }
 
@@ -490,7 +527,9 @@ $(document).on("contextmenu", ".item-content", function(evt) {
         } else if (clickedid == "gold") {
             clicked_id = "gold"
         } else {
-            clicked_id = table_inv[clickedid].item
+            clicked_name = table_inv[clickedid].item
+            clicked_id = table_inv[clickedid].itemId
+            clicked_meta = table_inv[clickedid].metaData
         }
 
         clicked_type = evt.target.id
@@ -604,7 +643,7 @@ function change_active_weapon(id){
 function UseItem(id) {
     if (table_inv[id].usable !== undefined){
         if (table_inv[id].usable == 1) {
-            $.post('http://gum_inventory/use_item', JSON.stringify({ item: table_inv[id].item }));
+            $.post('http://gum_inventory/use_item', JSON.stringify({ item: table_inv[id].item, id:table_inv[id].itemId }));
         }
     }
 }
@@ -616,14 +655,14 @@ function UseWeapon(id, model) {
 function DropItem(count) {
     contextMenu.classList.remove("visible");
     if (count !== 0) {
-        $.post('http://gum_inventory/drop_item', JSON.stringify({ item: clicked_id, count: Math.floor(count), is_weapon:clicked_type }));
+        $.post('http://gum_inventory/drop_item', JSON.stringify({ item: clicked_id, count: Math.floor(count), is_weapon:clicked_type, metaData:clicked_meta}));
     }
 }
 
 function GiveItem(count) {
     contextMenu.classList.remove("visible");
     if (count !== 0) {
-        $.post('http://gum_inventory/give_item', JSON.stringify({ item: clicked_id, count: count }));
+        $.post('http://gum_inventory/give_item', JSON.stringify({ item: clicked_id, count: count, metaData:clicked_meta, itemName:clicked_name }));
     }
 }
 
