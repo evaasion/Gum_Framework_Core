@@ -191,7 +191,7 @@ RegisterNUICallback('makeIt', function(data, cb)
                 TriggerEvent("guminputs:getInput", "Accept", "Count $", function(countDolar)
                     local countDolar = countDolar
                     if countDolar ~= 'close' then
-                        ExecuteCommand("addCurrency "..id.." 0 "..countDolar.."")
+                        ExecuteCommand("givemoney "..id.." 0 "..countDolar.."")
                     end
                 end)
             end
@@ -203,7 +203,7 @@ RegisterNUICallback('makeIt', function(data, cb)
                 TriggerEvent("guminputs:getInput", "Accept", "Count G", function(countGold)
                     local countGold = countGold
                     if countGold ~= 'close' then
-                        ExecuteCommand("addCurrency "..id.." 1 "..countGold.."")
+                        ExecuteCommand("givegold "..id.." 1 "..countGold.."")
                     end
                 end)
             end
