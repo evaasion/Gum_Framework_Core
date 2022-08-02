@@ -746,15 +746,17 @@ function Character.buySkinPlayer(source, skinplayer)
 	end
 end
 
-RegisterServerEvent('gumCore:checkPlayersOnline')
-AddEventHandler('gumCore:checkPlayersOnline', function(source, charid, firstname, lastname)
-	local count = 0
-	for k,v in pairs(GetPlayers()) do
-		count = count+1
+Citizen.CreateThread(function()
+	while true do
+		local count = 0
+		for k,v in pairs(GetPlayers()) do
+			count = count+1
+			Citizen.Wait(50)
+		end
+		TriggerClientEvent("gum_core:sendBack", -1, count)
+		Citizen.Wait(60000)
 	end
-	TriggerClientEvent("gum_core:sendBack", source, count)
 end)
-
 RegisterServerEvent('gumCore:GetPlayerIds')
 AddEventHandler('gumCore:GetPlayerIds', function(source, charid, firstname, lastname, cb)
 	local id_player = 0
