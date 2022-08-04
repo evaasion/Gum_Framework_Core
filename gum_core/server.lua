@@ -868,7 +868,8 @@ function gumCore.addCharacter(source, firstname, lastname, skintable, clothetabl
 	local coords_start = {x=1240.63, y=-1282.88, z=75.94}
 	local items_start = {}
 	for k,v in pairs(Config.StartItems) do
-		items_start[k] = v
+		local mathRandom = math.random(1,76062001718755)
+		table.insert(items_start, {itemId=mathRandom, item=k, count=v, metadata={}})
 	end
 	local status = '{"Hunger":100.0, "Thirst":100.0}'
 	exports.ghmattimysql:execute("INSERT INTO characters (`identifier`,`firstname`,`lastname`,`skinPlayer`,`compPlayer`,`inventory`,`coords`,`meta`,`money`) VALUES (@identifier,@firstname,@lastname,@skinPlayer,@compPlayer,@inventory,@coords,@meta,@money)", {['identifier'] = identifier,['firstname'] = firstname,['lastname'] = lastname,['skinPlayer'] = skintable,['money']=Config.StartMoney,['compPlayer'] = clothetable,['inventory']=json.encode(items_start), ['coords']=json.encode(coords_start),['meta']=status},
