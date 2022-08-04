@@ -1780,19 +1780,24 @@ Citizen.CreateThread(function()
 			if player_prompt2 then
 				player_prompt2:delete()
 			end
-			if combat_stance == false and not IsEntityDead(tgt1) then
-				local promptGroup = PromptGetGroupIdForTargetEntity(tgt1)
-				player_prompt = Uiprompt:new(`INPUT_CONTEXT_X`, ""..Config.Language[28].text.."", promptGroup)
-				player_prompt2 = Uiprompt:new(`INPUT_INTERACT_OPTION1`, ""..Config.Language[29].text.."", promptGroup)
-				player_prompt:setHoldMode(true)
-				player_prompt2:setHoldMode(true)
-				if Citizen.InvokeNative(0x305C8DCD79DA8B0F, 0, `INPUT_INTERACT_OPTION1`) then
-					TriggerServerEvent("gum_inventory:give_slap", playerid)
-					Citizen.Wait(2000)
-				end
-				if Citizen.InvokeNative(0x305C8DCD79DA8B0F, 0, `INPUT_CONTEXT_X`) then
-					TriggerServerEvent("gum_inventory:give_hand", playerid)
-					Citizen.Wait(2000)
+			local mycoords = GetEntityCoords(PlayerPedId())
+			local targetCoords = GetEntityCoords(tgt1)
+			local distance = GetDistanceBetweenCoords(mycoords.x, mycoords.y, mycoords.z, targetCoords.x, targetCoords.y, targetCoords.z, false)
+			if distance < 3 then
+				if combat_stance == false and not IsEntityDead(tgt1) then
+					local promptGroup = PromptGetGroupIdForTargetEntity(tgt1)
+					player_prompt = Uiprompt:new(`INPUT_CONTEXT_X`, ""..Config.Language[28].text.."", promptGroup)
+					player_prompt2 = Uiprompt:new(`INPUT_INTERACT_OPTION1`, ""..Config.Language[29].text.."", promptGroup)
+					player_prompt:setHoldMode(true)
+					player_prompt2:setHoldMode(true)
+					if Citizen.InvokeNative(0x305C8DCD79DA8B0F, 0, `INPUT_INTERACT_OPTION1`) then
+						TriggerServerEvent("gum_inventory:give_slap", playerid)
+						Citizen.Wait(2000)
+					end
+					if Citizen.InvokeNative(0x305C8DCD79DA8B0F, 0, `INPUT_CONTEXT_X`) then
+						TriggerServerEvent("gum_inventory:give_hand", playerid)
+						Citizen.Wait(2000)
+					end
 				end
 			end
 		end
@@ -1906,7 +1911,6 @@ AddEventHandler('gum_inventory:update_list_inventory', function(table, name, cou
 	else
 		speed = 0.0
 	end
-
 	if update_full == true then
 		SendNUIMessage({
 			type = "inventory_update",
