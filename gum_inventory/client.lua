@@ -222,8 +222,10 @@ RegisterNUICallback('transfer_to_storage', function(data, cb)
 				if tonumber(data.countInInventory) == 1 then
 					if tonumber(size) >= tonumber(data.size)+tonumber(1*data.limit) then
 						local emptyMetadata = false
-						for z,x in pairs(data.metaData) do
-							emptyMetadata = true
+						if data.metaData ~= nil then
+							for z,x in pairs(data.metaData) do
+								emptyMetadata = true
+							end
 						end
 						if emptyMetadata == true then
 							TriggerServerEvent("gum_inventory:transfer_item_to_storage", data.item, 1, data.container_id, data.itemId, data.metaData)
@@ -241,8 +243,10 @@ RegisterNUICallback('transfer_to_storage', function(data, cb)
 							if count_item ~= 'close' and count_item > 0 and data.count >= count_item then
 								if tonumber(size) >= tonumber(data.size)+tonumber(count_item*data.limit) then
 									local emptyMetadata = false
-									for z,x in pairs(data.metaData) do
-										emptyMetadata = true
+									if data.metaData ~= nil then
+										for z,x in pairs(data.metaData) do
+											emptyMetadata = true
+										end
 									end
 									if emptyMetadata == true then
 										TriggerServerEvent("gum_inventory:transfer_item_to_storage", data.item, count_item, data.container_id, data.itemId, data.metaData)
@@ -309,8 +313,10 @@ RegisterNUICallback('transfer_from_storage', function(data, cb)
 			if tonumber(data.countInInventory) == 1 then
 				if tonumber(data.count) >= tonumber(1) and Config.Max_Items >= tonumber(count_in_inventory+1*data.limit) then
 					local emptyMetadata = false
-					for z,x in pairs(data.metaData) do
-						emptyMetadata = true
+					if data.metaData ~= nil then
+						for z,x in pairs(data.metaData) do
+							emptyMetadata = true
+						end
 					end
 					if emptyMetadata == true then
 						TriggerServerEvent("gum_inventory:transfer_item_from_storage", data.item, 1, data.container_id, data.itemId, data.metaData)
@@ -326,8 +332,10 @@ RegisterNUICallback('transfer_from_storage', function(data, cb)
 					if count_item ~= nil then
 						if count_item ~= 'close' and tonumber(count_item) > 0 and tonumber(data.count) >= tonumber(count_item) and Config.Max_Items >= tonumber(count_in_inventory+count_item*data.limit) then
 							local emptyMetadata = false
-							for z,x in pairs(data.metaData) do
-								emptyMetadata = true
+							if data.metaData ~= nil then
+								for z,x in pairs(data.metaData) do
+									emptyMetadata = true
+								end
 							end
 							if emptyMetadata == true then
 								TriggerServerEvent("gum_inventory:transfer_item_from_storage", data.item, count_item, data.container_id, data.itemId, data.metaData)
