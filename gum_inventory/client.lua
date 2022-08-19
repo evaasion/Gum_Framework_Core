@@ -526,12 +526,20 @@ function saveWeaponAmmo()
 						if string.match(v.name, "revolver") or string.match(v.name, "REVOLVER") then
 							-- if GetHashKey(weapon_first_used) == GetHashKey(v.name)  then
 								weaponId = v.id
-								if v.conditionlevel+0.0002 <= 1.0 then
-									v.conditionlevel = v.conditionlevel+0.0002
+								if v.conditionlevel+0.01 <= 1.0 then
+									v.conditionlevel = condition_level[v.id]+0.01
 									condition_level[v.id] = v.conditionlevel
+									local weaponEntityIndex = GetCurrentPedWeaponEntityIndex(PlayerPedId())
+									Citizen.InvokeNative(0xA7A57E89E965D839, weaponEntityIndex, tonumber(v.conditionlevel))
+									Citizen.InvokeNative(0x812CE61DEBCAB948, weaponEntityIndex, tonumber(v.conditionlevel), 0)
+									condition_level[v.id] = tonumber(v.conditionlevel)
 								else
 									v.conditionlevel = 1.0
 									condition_level[v.id] = 1.0
+									local weaponEntityIndex = GetCurrentPedWeaponEntityIndex(PlayerPedId())
+									Citizen.InvokeNative(0xA7A57E89E965D839, weaponEntityIndex, tonumber(v.conditionlevel))
+									Citizen.InvokeNative(0x812CE61DEBCAB948, weaponEntityIndex, tonumber(v.conditionlevel), 0)
+									condition_level[v.id] = tonumber(v.conditionlevel)
 								end
 							-- end
 						end
@@ -545,12 +553,20 @@ function saveWeaponAmmo()
 						if string.match(v.name, "revolver") or string.match(v.name, "REVOLVER") then
 							-- if GetHashKey(weapon_first_used) == GetHashKey(v.name) or GetHashKey(weapon_second_used) == GetHashKey(v.name)  then
 								weaponId = v.id
-								if v.conditionlevel+0.0002 <= 1.0 then
-									v.conditionlevel = v.conditionlevel+0.0002
+								if v.conditionlevel+0.01 <= 1.0 then
+									v.conditionlevel = condition_level[v.id]+0.01
 									condition_level[v.id] = v.conditionlevel
+									local weaponEntityIndex = GetCurrentPedWeaponEntityIndex(PlayerPedId())
+									Citizen.InvokeNative(0xA7A57E89E965D839, weaponEntityIndex, tonumber(v.conditionlevel))
+									Citizen.InvokeNative(0x812CE61DEBCAB948, weaponEntityIndex, tonumber(v.conditionlevel), 0)
+									condition_level[v.id] = tonumber(v.conditionlevel)
 								else
 									v.conditionlevel = 1.0
 									condition_level[v.id] = 1.0
+									local weaponEntityIndex = GetCurrentPedWeaponEntityIndex(PlayerPedId())
+									Citizen.InvokeNative(0xA7A57E89E965D839, weaponEntityIndex, tonumber(v.conditionlevel))
+									Citizen.InvokeNative(0x812CE61DEBCAB948, weaponEntityIndex, tonumber(v.conditionlevel), 0)
+									condition_level[v.id] = tonumber(v.conditionlevel)
 								end
 							-- end
 						end
@@ -575,12 +591,20 @@ function saveWeaponAmmo()
 						if string.match(v.name, "pistol") or string.match(v.name, "PISTOL") then
 							-- if GetHashKey(weapon_first_used) == GetHashKey(v.name) then
 								weaponId2 = v.id
-								if v.conditionlevel+0.0002 <= 1.0 then
-									v.conditionlevel = v.conditionlevel+0.0002
+								if v.conditionlevel+0.01 <= 1.0 then
+									v.conditionlevel = condition_level[v.id]+0.01
 									condition_level[v.id] = v.conditionlevel
+									local weaponEntityIndex = GetCurrentPedWeaponEntityIndex(PlayerPedId())
+									Citizen.InvokeNative(0xA7A57E89E965D839, weaponEntityIndex, tonumber(v.conditionlevel))
+									Citizen.InvokeNative(0x812CE61DEBCAB948, weaponEntityIndex, tonumber(v.conditionlevel), 0)
+									condition_level[v.id] = tonumber(v.conditionlevel)
 								else
 									v.conditionlevel = 1.0
 									condition_level[v.id] = 1.0
+									local weaponEntityIndex = GetCurrentPedWeaponEntityIndex(PlayerPedId())
+									Citizen.InvokeNative(0xA7A57E89E965D839, weaponEntityIndex, tonumber(v.conditionlevel))
+									Citizen.InvokeNative(0x812CE61DEBCAB948, weaponEntityIndex, tonumber(v.conditionlevel), 0)
+									condition_level[v.id] = tonumber(v.conditionlevel)
 								end
 							-- end
 						end
@@ -594,12 +618,20 @@ function saveWeaponAmmo()
 						if string.match(v.name, "pistol") or string.match(v.name, "PISTOL") then
 							-- if GetHashKey(weapon_first_used) == GetHashKey(v.name) or GetHashKey(weapon_second_used) == GetHashKey(v.name)  then
 								weaponId = v.id
-								if v.conditionlevel+0.0002 <= 1.0 then
-									v.conditionlevel = v.conditionlevel+0.0002
+								if v.conditionlevel+0.01 <= 1.0 then
+									v.conditionlevel = condition_level[v.id]+0.01
 									condition_level[v.id] = v.conditionlevel
+									local weaponEntityIndex = GetCurrentPedWeaponEntityIndex(PlayerPedId())
+									Citizen.InvokeNative(0xA7A57E89E965D839, weaponEntityIndex, tonumber(v.conditionlevel))
+									Citizen.InvokeNative(0x812CE61DEBCAB948, weaponEntityIndex, tonumber(v.conditionlevel), 0)
+									condition_level[v.id] = tonumber(v.conditionlevel)
 								else
 									v.conditionlevel = 1.0
 									condition_level[v.id] = 1.0
+									local weaponEntityIndex = GetCurrentPedWeaponEntityIndex(PlayerPedId())
+									Citizen.InvokeNative(0xA7A57E89E965D839, weaponEntityIndex, tonumber(v.conditionlevel))
+									Citizen.InvokeNative(0x812CE61DEBCAB948, weaponEntityIndex, tonumber(v.conditionlevel), 0)
+									condition_level[v.id] = tonumber(v.conditionlevel)
 								end
 							-- end
 						end
@@ -622,12 +654,20 @@ function saveWeaponAmmo()
 				if v.used == 1 then
 					if string.match(v.name, "REPEATER") or string.match(v.name, "repeater") then
 						weaponId = v.id
-						if v.conditionlevel+0.0002 <= 1.0 then
-							v.conditionlevel = v.conditionlevel+0.0002
+						if v.conditionlevel+0.01 <= 1.0 then
+							v.conditionlevel = condition_level[v.id]+0.01
 							condition_level[v.id] = v.conditionlevel
+							local weaponEntityIndex = GetCurrentPedWeaponEntityIndex(PlayerPedId())
+							Citizen.InvokeNative(0xA7A57E89E965D839, weaponEntityIndex, tonumber(v.conditionlevel))
+							Citizen.InvokeNative(0x812CE61DEBCAB948, weaponEntityIndex, tonumber(v.conditionlevel), 0)
+							condition_level[v.id] = tonumber(v.conditionlevel)
 						else
 							v.conditionlevel = 1.0
 							condition_level[v.id] = 1.0
+							local weaponEntityIndex = GetCurrentPedWeaponEntityIndex(PlayerPedId())
+							Citizen.InvokeNative(0xA7A57E89E965D839, weaponEntityIndex, tonumber(v.conditionlevel))
+							Citizen.InvokeNative(0x812CE61DEBCAB948, weaponEntityIndex, tonumber(v.conditionlevel), 0)
+							condition_level[v.id] = tonumber(v.conditionlevel)
 						end
 					end
 				end
@@ -647,12 +687,20 @@ function saveWeaponAmmo()
 				if v.used == 1 then
 					if string.match(v.name, "shotgun") or string.match(v.name, "SHOTGUN") then
 						weaponId = v.id
-						if v.conditionlevel+0.0002 <= 1.0 then
-							v.conditionlevel = v.conditionlevel+0.0002
+						if v.conditionlevel+0.01 <= 1.0 then
+							v.conditionlevel = condition_level[v.id]+0.01
 							condition_level[v.id] = v.conditionlevel
+							local weaponEntityIndex = GetCurrentPedWeaponEntityIndex(PlayerPedId())
+							Citizen.InvokeNative(0xA7A57E89E965D839, weaponEntityIndex, tonumber(v.conditionlevel))
+							Citizen.InvokeNative(0x812CE61DEBCAB948, weaponEntityIndex, tonumber(v.conditionlevel), 0)
+							condition_level[v.id] = tonumber(v.conditionlevel)
 						else
 							v.conditionlevel = 1.0
 							condition_level[v.id] = 1.0
+							local weaponEntityIndex = GetCurrentPedWeaponEntityIndex(PlayerPedId())
+							Citizen.InvokeNative(0xA7A57E89E965D839, weaponEntityIndex, tonumber(v.conditionlevel))
+							Citizen.InvokeNative(0x812CE61DEBCAB948, weaponEntityIndex, tonumber(v.conditionlevel), 0)
+							condition_level[v.id] = tonumber(v.conditionlevel)
 						end
 					end
 				end
@@ -672,12 +720,20 @@ function saveWeaponAmmo()
 				if v.used == 1 then
 					if string.match(v.name, "rifle") or string.match(v.name, "RIFLE") then
 						weaponId = v.id
-						if v.conditionlevel+0.0002 <= 1.0 then
-							v.conditionlevel = v.conditionlevel+0.0002
+						if v.conditionlevel+0.01 <= 1.0 then
+							v.conditionlevel = condition_level[v.id]+0.01
 							condition_level[v.id] = v.conditionlevel
+							local weaponEntityIndex = GetCurrentPedWeaponEntityIndex(PlayerPedId())
+							Citizen.InvokeNative(0xA7A57E89E965D839, weaponEntityIndex, tonumber(v.conditionlevel))
+							Citizen.InvokeNative(0x812CE61DEBCAB948, weaponEntityIndex, tonumber(v.conditionlevel), 0)
+							condition_level[v.id] = tonumber(v.conditionlevel)
 						else
 							v.conditionlevel = 1.0
 							condition_level[v.id] = 1.0
+							local weaponEntityIndex = GetCurrentPedWeaponEntityIndex(PlayerPedId())
+							Citizen.InvokeNative(0xA7A57E89E965D839, weaponEntityIndex, tonumber(v.conditionlevel))
+							Citizen.InvokeNative(0x812CE61DEBCAB948, weaponEntityIndex, tonumber(v.conditionlevel), 0)
+							condition_level[v.id] = tonumber(v.conditionlevel)
 						end
 					end
 				end
@@ -715,12 +771,20 @@ function saveWeaponAmmo()
 				if v.used == 1 then
 					if rightHand == GetHashKey(v.name) then
 						weaponId = v.id
-						if v.conditionlevel+0.0002 <= 1.0 then
-							v.conditionlevel = v.conditionlevel+0.0002
+						if v.conditionlevel+0.01 <= 1.0 then
+							v.conditionlevel = condition_level[v.id]+0.01
 							condition_level[v.id] = v.conditionlevel
+							local weaponEntityIndex = GetCurrentPedWeaponEntityIndex(PlayerPedId())
+							Citizen.InvokeNative(0xA7A57E89E965D839, weaponEntityIndex, tonumber(v.conditionlevel))
+							Citizen.InvokeNative(0x812CE61DEBCAB948, weaponEntityIndex, tonumber(v.conditionlevel), 0)
+							condition_level[v.id] = tonumber(v.conditionlevel)
 						else
 							v.conditionlevel = 1.0
 							condition_level[v.id] = 1.0
+							local weaponEntityIndex = GetCurrentPedWeaponEntityIndex(PlayerPedId())
+							Citizen.InvokeNative(0xA7A57E89E965D839, weaponEntityIndex, tonumber(v.conditionlevel))
+							Citizen.InvokeNative(0x812CE61DEBCAB948, weaponEntityIndex, tonumber(v.conditionlevel), 0)
+							condition_level[v.id] = tonumber(v.conditionlevel)
 						end
 					end
 				end
