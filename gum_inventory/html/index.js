@@ -195,8 +195,8 @@ function money_update(money){
 function loadTableData(table_inv, money, wtable_inv, gold) {
     const tableBody = document.getElementById('tableData');
     let dataHtml = '';
-    dataHtml += '<div class="item" ><div id="money" class="item-content" " onMouseOver="change_name(-1)"  ondblclick="UseItem(money)"><img src="images/items/money.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_money">'+Math.round(money * 100)/100+'$</div></div></div>'
-    dataHtml += '<div class="item" ><div id="gold" class="item-content" " onMouseOver="change_name(-2)"  ondblclick="UseItem(gold)"><img src="images/items/gold.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_gold">'+Math.round(gold * 100)/100+'</div></div></div>'
+    dataHtml += '<div class="item" ><div id="money" class="item-content" " onMouseOver="change_name(-1)"  ondblclick="UseItem(money)"><img src="images/items/money.png" width="60" height="60"  id="item"><div class="bottom-right" id="count_money">'+Math.round(money * 100)/100+'$</div></div></div>'
+    dataHtml += '<div class="item" ><div id="gold" class="item-content" " onMouseOver="change_name(-2)"  ondblclick="UseItem(gold)"><img src="images/items/gold.png" width="60" height="60"  id="item"><div class="bottom-right" id="count_gold">'+Math.round(gold * 100)/100+'</div></div></div>'
     count_inventory = 0
     count_winventory = 0
     for (var i in table_inv) {
@@ -210,9 +210,9 @@ function loadTableData(table_inv, money, wtable_inv, gold) {
             }
         }
         if (durabilityValue !== 0) {
-            dataHtml += '<div class="item"><progress id="progress" max="100" value="'+durabilityValue+'"></progress><div id="'+ i +'" class="item-content" onMouseOver="change_name('+ i +')" ondblclick="UseItem('+i+')"><img src="images/items/' + table_inv[i].item + '.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_'+i+'">' + table_inv[i].count + '/'+Math.round(weight_item*100)/100+'kg</div></div></div>'
+            dataHtml += '<div class="item"><progress id="progress" max="100" value="'+durabilityValue+'"></progress><div id="'+ i +'" class="item-content" onMouseOver="change_name('+ i +')" ondblclick="UseItem('+i+')"><img src="images/items/' + table_inv[i].item + '.png" width="60" height="60"  id="item"><div class="bottom-right" id="count_'+i+'">' + table_inv[i].count + '/'+Math.round(weight_item*100)/100+'kg</div></div></div>'
         } else {
-            dataHtml += '<div class="item"><div id="'+ i +'" class="item-content" onMouseOver="change_name('+ i +')" ondblclick="UseItem('+i+')"><img src="images/items/' + table_inv[i].item + '.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_'+i+'">' + table_inv[i].count + '/'+Math.round(weight_item*100)/100+'kg</div></div></div>'
+            dataHtml += '<div class="item"><div id="'+ i +'" class="item-content" onMouseOver="change_name('+ i +')" ondblclick="UseItem('+i+')"><img src="images/items/' + table_inv[i].item + '.png" width="60" height="60"  id="item"><div class="bottom-right" id="count_'+i+'">' + table_inv[i].count + '/'+Math.round(weight_item*100)/100+'kg</div></div></div>'
         }
     }
     for (var i in wtable_inv) {
@@ -224,7 +224,14 @@ function loadTableData(table_inv, money, wtable_inv, gold) {
         const grid0 = new Muuri('.grid0', {
             dragEnabled: true,
             dragAxis: 'xy',
+            dragHandle: null,
+            dragSort: false,
             dragContainer: document.body,
+            
+            dragStartPredicate: {
+                distance: 10,
+                delay: 50,
+              },
             }).on('send', data => onDragFinished(data))
             .on('dragStart', function(item) {
                 var myDiv = document.getElementById('tableData');
@@ -333,13 +340,13 @@ function loadstoragedata(strg_dt) {
 
     for (var i in strg_dt) {
         if (strg_dt[i].weapon == false & strg_dt[i].item === 'money' & strg_dt[i].item !== 'gold') {
-            data_storage_Html += '<div class="item" data-content="'+strg_dt[i].label+'"><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].item + '.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_'+i+'">' + strg_dt[i].count + '</div></div></div>'
+            data_storage_Html += '<div class="item" data-content="'+strg_dt[i].label+'"><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].item + '.png" width="60" height="60"  id="item"><div class="bottom-right" id="count_'+i+'">' + strg_dt[i].count + '</div></div></div>'
         }
     }
 
     for (var i in strg_dt) {
         if (strg_dt[i].weapon == false & strg_dt[i].item === 'gold' & strg_dt[i].item !== 'money') {
-            data_storage_Html += '<div class="item" data-content="'+strg_dt[i].label+'"><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].item + '.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_'+i+'">' + strg_dt[i].count + '</div></div></div>'
+            data_storage_Html += '<div class="item" data-content="'+strg_dt[i].label+'"><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].item + '.png" width="60" height="60"  id="item"><div class="bottom-right" id="count_'+i+'">' + strg_dt[i].count + '</div></div></div>'
         }
     }
 
@@ -355,9 +362,9 @@ function loadstoragedata(strg_dt) {
                 }
             }
             if (durabilityValue !== 0) {
-                data_storage_Html += '<div class="item" data-content="'+strg_dt[i].label+'"><progress id="progress" max="100" value="'+durabilityValue+'"></progress><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].item + '.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_'+i+'">'+ strg_dt[i].count +'/'+ Math.round(weight_item * 100) / 100 + ' kg</div></div></div>'
+                data_storage_Html += '<div class="item" data-content="'+strg_dt[i].label+'"><progress id="progress" max="100" value="'+durabilityValue+'"></progress><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].item + '.png" width="60" height="60"  id="item"><div class="bottom-right" id="count_'+i+'">'+ strg_dt[i].count +'/'+ Math.round(weight_item * 100) / 100 + ' kg</div></div></div>'
             } else {
-                data_storage_Html += '<div class="item" data-content="'+strg_dt[i].label+'"><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].item + '.png" width="50" height="50"  id="item"><div class="bottom-right" id="count_'+i+'">'+ strg_dt[i].count +'/'+ Math.round(weight_item * 100) / 100 + ' kg</div></div></div>'
+                data_storage_Html += '<div class="item" data-content="'+strg_dt[i].label+'"><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].item + '.png" width="60" height="60"  id="item"><div class="bottom-right" id="count_'+i+'">'+ strg_dt[i].count +'/'+ Math.round(weight_item * 100) / 100 + ' kg</div></div></div>'
             }
         } 
     }
@@ -365,7 +372,7 @@ function loadstoragedata(strg_dt) {
     for (var i in strg_dt) {
         if (strg_dt[i].weapon == true & strg_dt[i].item !== 'money' & strg_dt[i].item !== 'gold'){
             count_sinventory = count_sinventory+1
-            data_storage_Html += '<div class="item" data-content="'+strg_dt[i].label+'"><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].count + '.png" width="50" height="50"  id="item"></div></div>'
+            data_storage_Html += '<div class="item" data-content="'+strg_dt[i].label+'"><div id="'+ i +'" class="item-content" onMouseOver="change_name_other('+ i +')" ><img src="images/items/' + strg_dt[i].count + '.png" width="60" height="60"  id="item"></div></div>'
         }
     }
 
@@ -375,6 +382,8 @@ function loadstoragedata(strg_dt) {
             dragEnabled: true,
             dragAxis: 'xy',
             dragContainer: document.body,
+            dragHandle: null,
+            dragSort: false,
             }).on('send', data => onDragFinished(data))
             .on('dragStart', function() {
                 dragged = true
