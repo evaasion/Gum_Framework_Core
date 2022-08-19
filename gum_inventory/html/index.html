@@ -66,6 +66,7 @@
     <div id ="id03"></div>
     <div class="grid_other" id="expand_container">
     </div>
+    <input id="myInput" type="text" onkeyup="filterTextInput()" placeholder="Hledej"/>
     <div id ="id05"></div>
     <div id ="id08"></div>
   </div>
@@ -79,6 +80,25 @@
 
   <script>
   $('input').click(function(){return false;});
+
+  function filterTextInput() {
+  var input, radios, radio_filter, text_filter, td0, i, divList;
+  input = document.getElementById("myInput");
+  text_filter = input.value.toUpperCase();
+  divList = $(".item");
+	
+ // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < divList.length; i++) {
+    td0 = divList[i].getAttribute('data-content');
+    if (td0) {
+      if (td0.toUpperCase().indexOf(text_filter) > -1) {
+        divList[i].style.display = "";
+      } else {
+        divList[i].style.display = "none";
+      }
+    } 
+  }
+}
 
   </script>
     <script src="./index.js" type="text/javascript"></script>
