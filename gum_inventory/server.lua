@@ -1386,3 +1386,27 @@ AddEventHandler('gum_inventory:save_cleaning', function(name, cleaning)
 	local Parameters = {['identifier'] = identifier, ['charidentifier'] = charid, ['name'] = name, ['dirtlevel'] = tonumber(cleaning), ['conditionlevel'] = tonumber(cleaning) }
 	exports.ghmattimysql:execute("UPDATE loadout SET dirtlevel=@dirtlevel, conditionlevel=@conditionlevel WHERE identifier = @identifier AND charidentifier = @charidentifier AND name = @name AND used = 1", Parameters)
 end)
+
+
+RegisterServerEvent('gum_inventory:getWeaponTable')
+AddEventHandler('gum_inventory:getWeaponTable', function()
+	local _source = source
+	local User = gumCore.getUser(tonumber(_source))
+	local Character = User.getUsedCharacter
+	local identifier = Character.identifier
+ 	local charid = Character.charIdentifier
+	exports.ghmattimysql:execute('SELECT id,identifier,name,ammo,used,comps,dirtlevel,conditionlevel FROM loadout WHERE charidentifier = @charidentifier AND identifier = @identifier' , {['charidentifier'] = charid, ['identifier'] = identifier}, function(result)
+		if result[1] ~= nil then
+			weapon_table[tonumber(_source)]  = {}
+			for k,v in pairs(result) do
+				in_inventory_weapons[tonumber(_source)] = k
+				for k2,v2 in pairs(wpn_table) do
+					if v2.item == v.name then
+						table.insert(weapon_table[tonumber(_source)], {id=v.id, name=v.name, label=v2.label, ammo=v.ammo, used=v.used, comps=v.comps, dirtlevel=v.dirtlevel, conditionlevel=v.conditionlevel})
+					end
+				end
+			end
+			TriggerClientEvent("gum_inventory:getWeaponTable", tonumber(_source), weapon_table[tonumber(_source)])
+		end
+	end)
+end)

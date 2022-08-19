@@ -628,7 +628,7 @@
 	max-width: 380px;
 	max-height: 280px;
 	top: 20%;
-	left: 5%;
+	left: 2%;
 }
 
 .grid1 {
@@ -672,15 +672,6 @@
      animation: fadeIn;
      animation-duration: 0.3s;
  }
-
-.item {
-    display: block;
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    margin: 5px;
-    text-align: center;
-}
 
 .grid2 {
     top: 40%;
@@ -766,17 +757,29 @@ h2 {
     z-index: 0;
 }
 
+.item {
+    display: block;
+    position: absolute;
+    width: 65px;
+    height: 65px;
+    margin: 5px;
+    text-align: center;
+    z-index: 1;
+}
+
 .item-content {
-    width: 60px;
-    height: 60px;
+    position:relative;
+    width: 65px;
+    height: 65px;
     background-image: url('images/button2.png');
     background-size: 100% 100%;
     cursor: pointer;
 }
 
 .item-content:hover {
-    width: 60px;
-    height: 60px;
+    position:relative;
+    width: 65px;
+    height: 65px;
     background-image: url('images/sbutton2.png');
     background-size: 100% 100%;
     cursor: pointer;

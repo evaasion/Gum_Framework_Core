@@ -56,7 +56,7 @@ exports('gum_inventoryApi',function()
     end
 
     self.addItem = function(source,itemName,count,metaData)
-        TriggerEvent("gumCore:addItem",source,tostring(itemName),tonumber(count),metaData)
+        TriggerEvent("gumCore:addItem",source, tostring(itemName), tonumber(count), metaData)
     end
 
     self.subItem = function(source,itemName,count)
