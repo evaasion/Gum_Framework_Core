@@ -34,7 +34,7 @@ var slot5 = ""
 var clicked_name = ""
 var table_inv = {}
 $(document).keydown(function(e) {
-    var close = 27, presse=69;
+    var close = 27,close2 = 66, presse=69;
     switch (e.keyCode) {
         case close:
             $.post('http://gum_inventory/exit', JSON.stringify({id:id_container}));
@@ -42,6 +42,16 @@ $(document).keydown(function(e) {
             removeAllChildNodes(table_for_delete);
             changed= false
             id_container = 0
+        break;
+        case close2:
+            if (id_container == 0) {
+                $.post('http://gum_inventory/exit', JSON.stringify({id:id_container}));
+                contextMenu.classList.remove("visible");
+                removeAllChildNodes(table_for_delete);
+                changed= false
+                id_container = 0
+            }
+
         break;
         case presse:
             if (Number(id_for_use_item) !== -1) {
