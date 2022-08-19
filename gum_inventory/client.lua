@@ -1001,10 +1001,16 @@ function LoadModel(model)
 	return true
 end
 
+RegisterNetEvent('gum_inventory:getWeaponTable')
+AddEventHandler('gum_inventory:getWeaponTable', function(wepTable)
+	weapon_table = wepTable
+end)
+
 RegisterNetEvent('gum_inventory:reload_weap')
 AddEventHandler('gum_inventory:reload_weap', function()
+	TriggerServerEvent("gum_inventory:getWeaponTable")
 	RemoveAllWeapons()
-	Citizen.Wait(500)
+	Citizen.Wait(1000)
 	for k,v in pairs(weapon_table) do
 		if v.used == 1 then
 			if Citizen.InvokeNative(0xD955FEE4B87AFA07, GetHashKey(v.name)) then
@@ -1673,8 +1679,10 @@ Citizen.CreateThread(function()
 										DeleteEntity(v.entity)
 										table.remove(dropped_items_entity, k)
 										local emptyMetadata = false
-										for z,x in pairs(v.metaData) do
-											emptyMetadata = true
+										if v.metaData ~= nil then
+											for z,x in pairs(v.metaData) do
+												emptyMetadata = true
+											end
 										end
 										if emptyMetadata == true then
 											TriggerServerEvent("gumCore:addItem", GetPlayerServerId(PlayerId()), v.item, v.count, v.metaData)
@@ -2025,8 +2033,10 @@ RegisterNUICallback('give_checked_item', function(data, cb)
 							TriggerServerEvent("gum_inventory:turn_ped", data.id)
 							TriggerServerEvent("gumCore:subItemByID", GetPlayerServerId(PlayerId()), data.item, data.count)
 							local emptyMetadata = false
-							for z,x in pairs(data.metaData) do
-								emptyMetadata = true
+							if data.metaData ~= nil then
+								for z,x in pairs(data.metaData) do
+									emptyMetadata = true
+								end
 							end
 							if emptyMetadata == true then
 								TriggerServerEvent("gumCore:addItem", tonumber(data.id), data.itemName, data.count, data.metaData, GetPlayerServerId(PlayerId()))
