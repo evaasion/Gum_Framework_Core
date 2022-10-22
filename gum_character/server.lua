@@ -4,6 +4,26 @@ TriggerEvent("getCore",function(core)
 	gumCore = core
 end)
 Inventory = exports.gum_inventory:gum_inventoryApi()
+inv = exports.gum_inventory:gum_inventoryApi()
+
+function contains(table, element)
+	if table ~= 0 then
+		for k, v in pairs(table) do
+			if v == element then
+				return true
+			end
+		end
+	end
+return false
+end
+
+function keysx(table)
+	local keys = 0
+	for k, v in pairs(table) do
+		keys = keys + 1
+	end
+	return keys
+end 
 
 RegisterServerEvent('gum_character:check_character')
 AddEventHandler('gum_character:check_character', function()
@@ -85,18 +105,63 @@ RegisterServerEvent('gum_character:dead_state')
 AddEventHandler( 'gum_character:dead_state', function(state)
 	local _source = source
 	local User = gumCore.getUser(source)
+	local char = User.getUsedCharacter
+	local identifier = char.identifier
 	local Character = User.getUsedCharacter
 	local u_identifier = Character.identifier
 	local u_charid = Character.charIdentifier
+	local u_inventory = Character.inventory
+	local money = char.money
+	local gold = char.gold
+	local role = char.rol
+	local tableofstuff = {}
 
 	if state == false then
 		isDead = 0
 	else
 		isDead = 1
+		if Config.removeweapons then
+			exports.ghmattimysql:execute('SELECT id,identifier,name FROM loadout WHERE charidentifier = @charidentifier AND identifier = @identifier' , {['identifier'] = u_identifier, ['charidentifier'] = u_charid}, function(result)
+				for k, v in pairs (result) do
+					if not contains(Config.blacklistedweapons, v.name) then
+						local id = v.id
+						print(id)
+						inv.subWeapon(_source, v.id)
+						exports.ghmattimysql:execute("DELETE FROM loadout WHERE id=@id", { ['id'] = id})
+					end
+				end
+			end)
+		end
+		if Config.removeitems then
+			TriggerEvent("gumCore:getUserInventory", _source, function(getInventory)
+				for k, v in pairs (getInventory) do
+					if not contains(Config.blacklisteditems,v.item) then
+						table.insert(tableofstuff,{item = v.item, count= v.count})
+						inv.subItem(_source, v.item, v.count)
+					end
+				end
+			end)
+		end
 	end
+	if Config.removecash then
+		if money > 0 then
+			table.insert(tableofstuff, {cash = money})
+			char.removeCurrency(_source, 0, money)
+		end
+	end
+	if Config.removegold then
+		if gold > 0 then
+			table.insert(tableofstuff, {gold = gold})
+			char.removeCurrency(1, gold)
+		end
+	end
+
 
 	local Parameters = { ['identifier'] = u_identifier, ['charidentifier'] = u_charid, ['isdead'] = isDead }
 	exports.ghmattimysql:execute("UPDATE characters SET isdead = @isdead WHERE identifier = @identifier AND charidentifier = @charidentifier", Parameters)
+	TriggerClientEvent("gum_notify:notify", _source, "COMA", "Tu es dans le coma, tu as perdu tes objets et armes", "COMA", 5000)
+
+
 end)
 
 function DiscordWeb(color, name, footer)
