@@ -2,7 +2,7 @@ Config = {}
 
 Config.WalkFaceStyle = true
 
-Config.TimeToRespawn = 100--Second
+Config.TimeToRespawn = 300--Second
 Config.SpawnCoords = {-2174, 665, 119.90, 15}
 
 Config.RespawnCoords = {
@@ -40,37 +40,37 @@ Config.blacklisteditems = {
 ----------------------------------------------------------------
 
 Config.Language = {
-    [1] = {text = "Création de personnage",},
-    [167] = {text = "Changer de sexe",},
-    [168] = {text = "Selectionner ce personnage",},
-    [169] = {text = "Gauche",},
-    [170] = {text = "Droite",},
-    [171] = {text = "Bas",},
-    [172] = {text = "Haut",},
+    [1] = {text = "Char creator",},
+    [167] = {text = "Switch char",},
+    [168] = {text = "Select char",},
+    [169] = {text = "Left",},
+    [170] = {text = "Right",},
+    [171] = {text = "Down",},
+    [172] = {text = "Up",},
     [173] = {text = "Zoom +",},
     [174] = {text = "Zoom -",},
-    [175] = {text = "Homme",},
-    [176] = {text = "Femme",},--
-    [177] = {text = "Selectionner ce personnage",},
-    [183] = {text = "Vous n'avez pas choisi de genre",},
-    [184] = {text = "Vous n'avez pas choisi votre couleur des yeux",},
-    [185] = {text = "Vous n'avez pas choisi votre corpulence.",},
-    [186] = {text = "Vous n'avez pas choisi d'ethnie.",},
-    [187] = {text = "Vous n'avez pas choisi de textures de corps",},
-    [188] = {text = "Vous n'avez pas choisi de textures de jambes",},
-    [189] = {text = "Vous n'avez pas renseigner de Prenom et Nom",},
-    [190] = {text = "Sélection de personnage",},
-    [191] = {text = "Vous changez de personnage, patientez 10 secondes.",},
-    [192] = {text = "Vous avez atteint la limite de création de personnage."},
+    [175] = {text = "Male",},
+    [176] = {text = "Female",},--
+    [177] = {text = "Select char",},
+    [183] = {text = "You dont have selected gender",},
+    [184] = {text = "You dont have selected eyes",},
+    [185] = {text = "You dont have selected body type.",},
+    [186] = {text = "You dont have selected native.",},
+    [187] = {text = "You dont have selected body texture",},
+    [188] = {text = "You dont have selected legs texture",},
+    [189] = {text = "You dont have selected firstname or lastname",},
+    [190] = {text = "Character selection",},
+    [191] = {text = "You switch character wait 10 second.",},
+    [192] = {text = "You cant make character, becouse you have max limit."},
 
-    [193] = {text = "Vous devez ajouter un nom"},
-    [194] = {text = "Vous devez choisir une ethnie"},
-    [195] = {text = "Vous devez choisir une texture de corps"},
-    [196] = {text = "Vous devez choisir une texture de jambes"},
-    [197] = {text = "Vous devez choisir une corpulence"},
-    [198] = {text = "Vous devez choisir votre taille"},
-    [199] = {text = "vous devez choisir des yeux"},
-    [200] = {text = "vous devez choisir une texture de tête"},
+    [193] = {text = "You miss add name"},
+    [194] = {text = "You miss edit nation"},
+    [195] = {text = "You miss edit body texture"},
+    [196] = {text = "You miss edit legs texture"},
+    [197] = {text = "You miss edit body type"},
+    [198] = {text = "You miss edit waist"},
+    [199] = {text = "You miss edit eyes"},
+    [200] = {text = "You miss edit head texture"},
 }
 
 --- DONT TOUCH HERE
