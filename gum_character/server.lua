@@ -152,7 +152,7 @@ AddEventHandler( 'gum_character:dead_state', function(state)
 	if Config.removegold then
 		if gold > 0 then
 			table.insert(tableofstuff, {gold = gold})
-			char.removeCurrency(1, gold)
+			char.removeCurrency(_source, 1, gold)
 		end
 	end
 
