@@ -3,7 +3,7 @@ Config = {}
 Config.WalkFaceStyle = true
 
 Config.TimeToRespawn = 300--Second
-Config.SpawnCoords = {-2174, 665, 119.90, 15}
+Config.SpawnCoords = {1240.63, -1282.88, 75.94, 312.0}
 
 Config.RespawnCoords = {
         [1] = {x=-288.67, y=810.37, z=120.10},--Valentine
