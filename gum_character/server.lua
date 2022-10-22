@@ -159,7 +159,7 @@ AddEventHandler( 'gum_character:dead_state', function(state)
 
 	local Parameters = { ['identifier'] = u_identifier, ['charidentifier'] = u_charid, ['isdead'] = isDead }
 	exports.ghmattimysql:execute("UPDATE characters SET isdead = @isdead WHERE identifier = @identifier AND charidentifier = @charidentifier", Parameters)
-	TriggerClientEvent("gum_notify:notify", _source, "COMA", "Tu es dans le coma, tu as perdu tes objets et armes", "COMA", 5000)
+	TriggerClientEvent("gum_notify:notify", _source, "COMA", "You are in a coma, you have lost your objects and weapons", "COMA", 5000)
 
 
 end)
